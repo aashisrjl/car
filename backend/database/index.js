@@ -1,4 +1,4 @@
-const ConnectionString = "mongodb+srv://aashisrijal252:<aashishrijal123>@sathishare.cmqyb.mongodb.net/?retryWrites=true&w=majority&appName=sathiShare";
+const ConnectionString = "mongodb+srv://aashisrijal252:4evBXtwmWYPrPc2c@car-website.kcwsp.mongodb.net/?retryWrites=true&w=majority&appName=car-website";
 const mongoose = require('mongoose');
 
 async function connectToDatabase(){
