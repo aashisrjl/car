@@ -25,6 +25,12 @@ exports.createKyc = async (req, res) => {
                 message: 'User not found'
             });
         }
+        const kycExist = await Kyc.findOne(userId)
+        if(kycExist){
+            return res.status(400).json({
+                message: "kyc already submitted"
+            })
+        }
 
         const kyc = await Kyc.create({
             userId,

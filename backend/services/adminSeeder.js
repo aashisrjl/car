@@ -5,11 +5,8 @@ const bcrypt = require("bcrypt");
 const adminSeeder = async () => {
     try {
         // Find the admin user by email
-        const data = await User.findOne({
-            where: {
-                email: "yunishpandit98@gmail.com"
-            }
-        });
+        email = "yunishpandit98@gmail.com";
+        const data = await User.findOne({email})
 
         // If the user does not exist, create it
         if (!data) {
