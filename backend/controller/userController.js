@@ -2,6 +2,10 @@
 const User = require("../model/userModel")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const sendEmail = require("../services/sendMail");
+
+
 const {JWT_SECRET,NODE_ENV} = process.env
 
 
@@ -26,21 +30,27 @@ exports.userRegister = async (req, res) => {
 
         const hashedPassword = bcrypt.hashSync(password, 8);
 
+        //generate 6 digit otp
+        const otp = crypto.randomInt(100000,999999).toString();
+        const otpExpiry = new Date(Date.now() + 10*60*1000); // its valid for 10 min
+
         const user = await User.create({
             fullName,
             email,
             phone,
             password: hashedPassword,
+            otp,
+            otpExpiry,
+            isVerified : false
         });
+        sendEmail({
+            email,
+            subject: "Verify your email",
+            text: `Your OTP is ${otp} `
+        })
 
-        return res.status(201).json({
-            message: "User registered successfully",
-            user: {
-                id: user._id,
-                fullName: user.fullName,
-                email: user.email,
-                phone: user.phone
-            }
+        return res.status(200).json({
+            message: "OTP sent to your email. Please verify your account."
         });
 };
 
@@ -134,5 +144,43 @@ exports.deleteUser = async(req,res)=>{
         user
 
     })
+}
+
+exports.verifyOtp = async(req,res)=>{
+    const {email,otp}=req.body
+
+    if(!email || !otp){
+        return res.status(400).json({
+            message: "please provide email and OTP"
+        });
+    }
+
+    const user = await User.findOne({email,otp});
+    if(!user){
+        return res.status(400).json({
+            message: "Invalid OTP or email"
+        });
+    }
+
+    if(user.otpExpiry < new Date()){
+        return res.status(400).json({
+            message: "OTP expired"
+            });
+    }
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+
+    return res.status(200).json({
+        message: "User verified and registered successfully",
+        user: {
+            id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            phone: user.phone
+        }
+    });
+
 }
 

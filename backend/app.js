@@ -6,22 +6,26 @@ const port = process.env.PORT;
 
 const connectToDatabase = require('./database/index.js');
 connectToDatabase();
-const bcrypt = require('bcrypt');
-const cookies = require('cookie-parser');
-const { promisify } = require("util");
-const userRoute = require("./routes/userRoute.js")
 
+const adminSeeder = require('./services/adminSeeder.js')
+adminSeeder();
+
+
+const userRoute = require("./routes/userRoute.js")
+const kycRoute = require("./routes/kycRoute.js")
+
+const cookies = require('cookie-parser');
 app.use(cookies())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}));
 
 //routes
 app.use("/user",userRoute);
+app.use("/user/kyc",kycRoute);
 
 app.get("/",(req,res)=>{
     res.send("WELCOME");
 })
-
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
