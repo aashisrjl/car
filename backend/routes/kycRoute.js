@@ -1,6 +1,6 @@
 const express = require('express');
 const { errorHandler } = require('../middleware/errorHandler');
-const { createKyc, verifyKyc, getAllKyc } = require('../controller/kycController');
+const { createKyc, verifyKyc, getAllKyc, getSingleKyc } = require('../controller/kycController');
 const { upload } = require('../middleware/multerConfig');
 const { isAuthenticated } = require('../middleware/isAuthenticated');
 const { allowedTo } = require('../middleware/allowedTO');
@@ -23,5 +23,9 @@ router.route("/getAllKyc/")
 .get(isAuthenticated,
     allowedTo('admin'),
     errorHandler(getAllKyc))
+
+    router.route('/getSingleKyc/:id')
+    .get(isAuthenticated,
+    errorHandler(getSingleKyc))
 
 module.exports = router

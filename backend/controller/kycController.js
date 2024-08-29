@@ -127,3 +127,16 @@ exports.getAllKyc = async (req, res) => {
 
         res.status(200).json(kycs);
 };
+
+//singlekyc
+exports.getSingleKyc = async (req, res) => {
+    const kycId = req.params.id;
+    const userId = req.userId;
+    const kyc = await Kyc.findById(kycId).populate('userId');
+    res.status(200).json({
+        message: "Single kyc fetched",
+        kyc
+    })
+
+
+}
