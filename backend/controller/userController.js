@@ -184,3 +184,48 @@ exports.verifyOtp = async(req,res)=>{
 
 }
 
+
+// Resend OTP function
+exports.resendOtp = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            message: "Please provide your email",
+        });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found with this email",
+        });
+    }
+
+    if (user.isVerified) {
+        return res.status(400).json({
+            message: "User is already verified",
+        });
+    }
+
+
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // Valid for 10 minutes
+
+    user.otp = otp;
+    user.otpExpiry = otpExpiry;
+    await user.save();
+
+    sendEmail({
+        email: user.email,
+        subject: "Resend OTP - Verify your email",
+        text: `Your new OTP is ${otp}. It is valid for the next 10 minutes.`,
+    });
+
+    return res.status(200).json({
+        message: "New OTP sent to your email. Please verify your account.",
+    });
+};
+
+

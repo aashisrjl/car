@@ -2,49 +2,82 @@ const Kyc = require("../model/kycModel");
 const User = require("../model/userModel");
 
 exports.createKyc = async (req, res) => {
-        const { documentType, documentNumber } = req.body;
-        const userId = req.userId;
+    const {
+        dob,
+        gender,
+        documentType,
+        documentNumber,
+        currentAddress,
+        permanentAddress,
+        fatherName,
+        motherName,
+        maritalStatus,
+        occupation
+    } = req.body;
 
-        if (!documentType || !documentNumber) {
-            return res.status(400).json({
-                message: 'Please fill all the fields'
-            });
-        }
+    const userId = req.userId;
+    const youName = req.user.fullName;
 
-        if (!req.file) {
-            return res.status(400).json({
-                message: "Please provide the document"
-            });
-        }
-
-        const documentImage = req.file.filename;
-
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({
-                message: 'User not found'
-            });
-        }
-        const kycExist = await Kyc.findOne(userId)
-        if(kycExist){
-            return res.status(400).json({
-                message: "kyc already submitted"
-            })
-        }
-
-        const kyc = await Kyc.create({
-            userId,
-            documentType,
-            documentNumber,
-            documentImage 
+    if (!dob || !gender || !documentType || !documentNumber || 
+        !currentAddress || !permanentAddress || !fatherName || !motherName || 
+        !maritalStatus || !occupation) {
+        return res.status(400).json({
+            message: 'Please fill all the fields'
         });
+    }
 
-        res.status(200).json({
-            message: "KYC submitted successfully",
-            kyc
+    if (!req.files || !req.files['yourPhoto'] || !req.files['documentImage']) {
+        return res.status(400).json({
+            message: "Please provide both your photo and document image"
         });
+    }
 
+    const yourPhoto = req.files['yourPhoto'][0].filename; // Access the user's photo
+    const documentImage = req.files['documentImage'][0].filename; // Access the document image
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({
+            message: 'User not found'
+        });
+    }
+    if(!user.isVerified){
+        return res.status(400).json({
+            message: 'Please Verify your gmail first!'
+            });
+    }
+
+    const kycExist = await Kyc.findOne({ userId });
+    if (kycExist) {
+        return res.status(400).json({
+            message: "KYC already submitted"
+        });
+    }
+
+    const kyc = await Kyc.create({
+        userId,
+        yourPhoto,
+        dob,
+        gender,
+        documentType,
+        documentNumber,
+        documentImage,
+        currentAddress,
+        permanentAddress,
+        fatherName,
+        motherName,
+        maritalStatus,
+        occupation
+    });
+
+    res.status(200).json({
+        message: "KYC submitted successfully",
+        kyc
+    });
 };
+
+
+
 
 
 exports.verifyKyc = async (req, res) => {
@@ -89,7 +122,7 @@ exports.getAllKyc = async (req, res) => {
         const kycs = await Kyc.find()
             .populate({
                 path: 'userId', // Path to populate
-                select: 'fullName email' // Fields to include from the User model
+                select: 'fullName email phone' // Fields to include from the User model
             });
 
         res.status(200).json(kycs);

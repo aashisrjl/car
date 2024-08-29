@@ -13,6 +13,7 @@ adminSeeder();
 
 const userRoute = require("./routes/userRoute.js")
 const kycRoute = require("./routes/kycRoute.js")
+const profileRoute = require('./routes/profileRoute.js')
 
 const cookies = require('cookie-parser');
 app.use(cookies())
@@ -22,6 +23,7 @@ app.use(express.urlencoded({extended:true}));
 //routes
 app.use("/user",userRoute);
 app.use("/user/kyc",kycRoute);
+app.use("/user/profile",profileRoute);
 
 app.get("/",(req,res)=>{
     res.send("WELCOME");

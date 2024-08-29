@@ -6,8 +6,22 @@ const { isAuthenticated } = require('../middleware/isAuthenticated');
 const { allowedTo } = require('../middleware/allowedTO');
 const router = express.Router(); 
 
-router.route("/submit/").post(isAuthenticated,upload.single('file'),errorHandler(createKyc))
-router.route("/verify/:kycId").post(isAuthenticated,allowedTo('admin'),errorHandler(verifyKyc))
-router.route("/getAllKyc/").get(isAuthenticated,allowedTo('admin'),errorHandler(getAllKyc))
+router.route("/submit/")
+    .post(isAuthenticated,upload.fields([
+    { name: 'yourPhoto', maxCount: 1 },
+    { name: 'documentImage', maxCount: 1 }
+    ]),
+    errorHandler(createKyc))
+
+
+router.route("/verify/:kycId")
+    .post(isAuthenticated,
+    allowedTo('admin'),
+    errorHandler(verifyKyc))
+
+router.route("/getAllKyc/") 
+.get(isAuthenticated,
+    allowedTo('admin'),
+    errorHandler(getAllKyc))
 
 module.exports = router
