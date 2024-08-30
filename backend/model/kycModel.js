@@ -7,6 +7,19 @@ const kycSchema = new Schema({
         ref: 'User',
         required: true
     },
+    yourPhoto: {
+        type: String,  // URL or path to the photo
+        required: true,
+    },
+    dob: {
+        type: Date,
+        required: true,
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'other'],
+        required: true,
+    },
     documentType: {
         type: String,
         required: true,
@@ -17,7 +30,32 @@ const kycSchema = new Schema({
         required: true,
     },
     documentImage: {
-        type: String, 
+        type: String,  // URL or path to the document image
+        required: true,
+    },
+    currentAddress: {
+        type: String,
+        required: true,
+    },
+    permanentAddress: {
+        type: String,
+        required: true,
+    },
+    fatherName: {
+        type: String,
+        required: true,
+    },
+    motherName: {
+        type: String,
+        required: true,
+    },
+    maritalStatus: {
+        type: String,
+        enum: ['single', 'married', 'divorced', 'widowed'],
+        required: true,
+    },
+    occupation: {
+        type: String,
         required: true,
     },
     status: {

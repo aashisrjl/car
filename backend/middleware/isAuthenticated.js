@@ -6,10 +6,11 @@ const JWT_SECRET = process.env.JWT_SECRET;
 exports.isAuthenticated = async (req, res, next) => {
     try {
         // check cookie
-        const token = req.cookies.carToken;
+        // const token = req.cookies.carToken;
+        const token = req.headers.authorization;
         if (!token) {
             return res.status(401).json({
-                message: 'You are not logged in!'
+                message: 'You are not logged in(token invalid)!'
             });
         }
 

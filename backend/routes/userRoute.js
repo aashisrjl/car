@@ -5,7 +5,8 @@ const {
      handleLogout, 
      getAllUsers, 
      deleteUser, 
-     verifyOtp} = require('../controller/userController');
+     verifyOtp,
+     resendOtp} = require('../controller/userController');
 const { errorHandler } = require('../middleware/errorHandler');
 const { isAuthenticated } = require('../middleware/isAuthenticated');
 const { allowedTo } = require('../middleware/allowedTO');
@@ -17,5 +18,6 @@ router.route('/logout').post(errorHandler(handleLogout))
 router.route('/list').get(isAuthenticated,allowedTo('admin'),errorHandler(getAllUsers))
 router.route('/delete/:id').delete(errorHandler(deleteUser))
 router.route('/verifyOtp').post(errorHandler(verifyOtp))
+router.route('/resendOtp').post(errorHandler(resendOtp))
 
 module.exports = router

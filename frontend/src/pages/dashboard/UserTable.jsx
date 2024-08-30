@@ -1,29 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Typography,
-  Chip,
-} from "@material-tailwind/react";
 import axios from 'axios';
+import { Card, CardHeader, CardBody, Typography, Chip } from "@material-tailwind/react";
 
 export function UserTable() { 
-
   const [users, setUsers] = useState([]);
+  const token = localStorage.getItem("carToken");
+  console.log(token)
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/user/list'); 
+        const response = await axios.get('http://localhost:3000/user/list', {
+          headers: {
+            Authorization: `${token}`, 
+          },
+          withCredentials: true,
+        });
+
         setUsers(response.data.users); 
+        console.log(response.data);
       } catch (error) {
         console.log('Error fetching users', error);
       }
     };
 
     fetchUsers(); 
-  }, []);
+  }, [token]);
+
   return (
     <Card>
       <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
