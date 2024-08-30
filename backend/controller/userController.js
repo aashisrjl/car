@@ -111,7 +111,8 @@ exports.userLogin = async (req, res) => {
                 fullName: user.fullName,
                 email: user.email,
                 phone: user.phone
-            }
+            },
+            token
         });
   
 };
