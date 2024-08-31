@@ -229,4 +229,88 @@ exports.resendOtp = async (req, res) => {
     });
 };
 
+exports.forgotPassword = async(req,res)=>{
+    const {email}=req.body;
+    if(!email){
+        return res.status(400).json({
+            message: "please Enter email"
+        })
+    }
+    const user=await User.findOne({email});
+    if(!user){
+        return res.status(404).json({
+            message: "User not found with this email",
+            });
+        }
+            const otp=crypto.randomInt(100000,999999).toString();
+            const otpExpiry=new Date(Date.now()+10*60*1000);//Valid for 10 min
+            user.otp=otp;
+            user.otpExpiry=otpExpiry;
+            await user.save();
+            sendEmail({
+                email,
+                subject: "Reset Password - Verify your email",
+                text: `Your new OTP is ${otp}. It is valid for the next 10 minutes`
+            })
+            return res.status(200).json({
+                message: "New OTP sent to your email. Please reset your password.",
+                email
+                });
+};
+
+exports.verifyForgotPasswordOtp = async(req,res)=>{
+    const {otp}=req.body;
+    const {email} = req.params
+    const user = await User.findOne({email});
+    if(!user){
+        return res.status(404).json({
+            message: "User not found with this email",
+            });
+            }
+            if(user.otpExpiry<new Date()){
+                return res.status(400).json({
+                    message: "OTP has expired. Please request a new OTP.",
+                    });
+                    }
+                    if(user.otp!==otp){
+                        return res.status(400).json({
+                            message: "Invalid OTP",
+                            });
+                            }
+                            user.otp=null;
+                            user.otpExpiry=null;
+                            await user.save();
+                            return res.status(200).json({
+                                message: "OTP verified successfully",
+                                email
+                            })
+}
+
+exports.changePassword = async (req, res) => {
+    const { password, passwordConfirm } = req.body;
+    const { email } = req.params;
+    
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found with this email",
+            });
+        }
+
+        if (password !== passwordConfirm) {
+            return res.status(400).json({
+                message: "Passwords do not match",
+            });
+        }
+        
+        user.password = bcrypt.hashSync(password, 8);
+        await user.save();
+
+        return res.status(200).json({
+            message: "Password changed successfully",
+        })
+ 
+};
+
+
 
