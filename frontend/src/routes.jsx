@@ -19,7 +19,7 @@ export const routes = [
     pages: [
       {
         icon: <HomeIcon {...icon} />,
-        name: "dashboard",
+        name: "Home",
         path: "/home",
         element: <Home />,
       },
@@ -31,7 +31,7 @@ export const routes = [
       },
       {
         icon: <TableCellsIcon {...icon} />,
-        name: "tables",
+        name: " Details",
         path: "/tables",
         element: <Tables />,
       },

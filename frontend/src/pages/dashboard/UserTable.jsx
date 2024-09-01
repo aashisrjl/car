@@ -38,7 +38,7 @@ export function UserTable() {
         <table className="w-full min-w-[640px] table-auto">
           <thead>
             <tr>
-              {["Full Name", "Email", "Phone", "Role", "KYC Verified"].map((el) => (
+              {["Full Name", "Email", "Phone", "Role", "User Verified"].map((el) => (
                 <th
                   key={el}
                   className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -54,7 +54,7 @@ export function UserTable() {
             </tr>
           </thead>
           <tbody>
-            {users.map(({ fullName, email, phone, role, kycVerified }, key) => {
+            {users.map(({ fullName, email, phone, role, UserVerified }, key) => {
               const className = `py-3 px-5 ${
                 key === users.length - 1 ? "" : "border-b border-blue-gray-50"
               }`;
@@ -84,8 +84,8 @@ export function UserTable() {
                   <td className={className}>
                     <Chip
                       variant="gradient"
-                      color={kycVerified ? "green" : "red"}
-                      value={kycVerified ? "Verified" : "Not Verified"}
+                      color={UserVerified ? "green" : "red"}
+                      value={UserVerified ? "Verified" : "Not Verified"}
                       className="py-0.5 px-2 text-[11px] font-medium w-fit"
                     />
                   </td>

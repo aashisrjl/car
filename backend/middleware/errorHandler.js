@@ -3,7 +3,7 @@ exports.errorHandler = (fn)=>{
         fn(req,res).catch((err)=>{
             return res.status(500).json({
                 message: "internal/server error",
-                err
+                err:err.message
             })
         })
     }
