@@ -227,9 +227,6 @@ exports.resendOtp = async (req, res) => {
     return res.status(200).json({
         message: "New OTP sent to your email. Please verify your account.",
     });
-<<<<<<< HEAD
-};
-=======
 };
 
 exports.forgotPassword = async(req,res)=>{
