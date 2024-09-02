@@ -316,5 +316,3 @@ exports.changePassword = async (req, res) => {
 };
 
 
-
->>>>>>> 1f9718489cf1fe325a3a47023b022f0b59465079
