@@ -1,5 +1,5 @@
 
-const User = require("../model/userModel")
+const User = require("../model/userModel");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -13,7 +13,7 @@ const {JWT_SECRET,NODE_ENV} = process.env
 exports.userRegister = async (req, res) => {
     const { fullName, email, phone, password } = req.body;
 
-    if (!fullName || !email || !phone || !password) {
+    if (!fullName || !email || !password) {
         return res.status(400).json({
             message: "Please fill all fields",
         });
@@ -311,6 +311,3 @@ exports.changePassword = async (req, res) => {
         })
  
 };
-
-
-
