@@ -9,7 +9,8 @@ const {
      resendOtp,
      forgotPassword,
      verifyForgotPasswordOtp,
-     changePassword} = require('../controller/userController');
+     changePassword,
+     loggedInUser} = require('../controller/userController');
 const { errorHandler } = require('../middleware/errorHandler');
 const { isAuthenticated } = require('../middleware/isAuthenticated');
 const { allowedTo } = require('../middleware/allowedTO');
@@ -19,6 +20,7 @@ router.route('/register').post(errorHandler(userRegister))
 router.route('/login').post(errorHandler(userLogin))
 router.route('/logout').post(errorHandler(handleLogout))
 router.route('/list').get(isAuthenticated,allowedTo('admin'),errorHandler(getAllUsers))
+router.route('/loggedInUser').get(isAuthenticated,errorHandler(loggedInUser))
 router.route('/delete/:id').delete(errorHandler(deleteUser))
 router.route('/verifyOtp').post(errorHandler(verifyOtp))
 router.route('/resendOtp').post(errorHandler(resendOtp))

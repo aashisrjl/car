@@ -87,6 +87,12 @@ exports.userLogin = async (req, res) => {
                 });
             }
         }
+        if(!user.isVerified){
+            res.status(400).json({
+                message: "Please verify your account first"
+            })
+        }
+
 
         const isMatch = bcrypt.compareSync(password, user.password);
         if (!isMatch) {
@@ -134,6 +140,21 @@ exports.getAllUsers = async(req,res)=>{
         message: "user fetch successfully",
         users
     })
+}
+
+//login user
+exports.loggedInUser = async(req,res)=>{
+    const userId = req.userId;
+    const user = await User.findById(userId);
+    if(!user){
+        return res.status(404).json({
+            message: "User not found"
+            })
+        }
+            res.status(200).json({
+                message: "User found successfully",
+                user
+            })
 }
 
 //deleteusers

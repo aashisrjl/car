@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express();
 const port = 3000;
-const cors = require('cors')
+// const cors = require('cors')
 
 
 const connectToDatabase = require('./database/index.js');
@@ -20,10 +20,10 @@ const cookies = require('cookie-parser');
 app.use(cookies())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}));
-app.use(cors({
-    origin: 'http://localhost:5173', // frontend URL
-    credentials: true,
-}))
+// app.use(cors({
+//     origin: '*', // frontend URL
+//     credentials: true,
+// }))
 //routes
 app.use("/user",userRoute);
 app.use("/user/kyc",kycRoute);

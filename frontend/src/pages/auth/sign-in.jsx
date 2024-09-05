@@ -8,6 +8,7 @@ import {
 import { Link, Navigate } from "react-router-dom";
 import axios from 'axios';
 import { useState } from "react";
+import { Sidenav } from "@/widgets/layout";
 
 export function SignIn() {
   const [formData, setFormData] = useState({
@@ -50,6 +51,8 @@ export function SignIn() {
   }
 
   return (
+
+
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
@@ -158,6 +161,7 @@ export function SignIn() {
         <img src="/img/pattern.png" className="h-full w-full object-cover rounded-3xl" />
       </div>
     </section>
+    
   );
 }
 
