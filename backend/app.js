@@ -15,19 +15,21 @@ adminSeeder();
 const userRoute = require("./routes/userRoute.js")
 const kycRoute = require("./routes/kycRoute.js")
 const profileRoute = require('./routes/profileRoute.js')
+const carDetail = require('./routes/carDetail.js')
 
 const cookies = require('cookie-parser');
 app.use(cookies())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}));
 app.use(cors({
-    origin: '*', // frontend URL
+    origin: '*',
     credentials: true,
 }))
 //routes
 app.use("/user",userRoute);
 app.use("/user/kyc",kycRoute);
 app.use("/user/profile",profileRoute);
+app.use("/car/",carDetail);
 
 app.get("/",(req,res)=>{
     res.send("WELCOME");

@@ -23,7 +23,7 @@ router.route('/list').get(isAuthenticated,allowedTo('admin'),errorHandler(getAll
 router.route('/loggedInUser').get(isAuthenticated,errorHandler(loggedInUser))
 router.route('/delete/:id').delete(errorHandler(deleteUser))
 router.route('/verifyOtp').post(errorHandler(verifyOtp))
-router.route('/resendOtp').post(errorHandler(resendOtp))
+router.route('/resendOtp').post(resendOtp)
 router.route('/forgotPassword').post(errorHandler(forgotPassword))
 router.route('/verifyForgotPasswordOtp/:email').post(errorHandler(verifyForgotPasswordOtp))
 router.route('/changePassword/:email').post(errorHandler(changePassword))
