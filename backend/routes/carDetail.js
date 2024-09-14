@@ -4,5 +4,5 @@ const { allowedTo } = require('../middleware/allowedTO')
 const { createCarDetail, handleOrder } = require('../controller/carDetail')
 const router = express.Router()
 router.route("/carDetail").post(isAuthenticated,allowedTo('admin'),createCarDetail);
-router.route("/save").get(isAuthenticated,handleOrder)
+router.route("/save/:id").get(isAuthenticated,handleOrder)
 module.exports = router
